@@ -37,6 +37,11 @@
 #define AP_MOTORS_HELI_RSC_THRCRV_75_DEFAULT    500
 #define AP_MOTORS_HELI_RSC_THRCRV_100_DEFAULT   1000
 
+//Governor
+#define AP_MOTORS_HELI_RSC_ENG_RPM              10000
+#define AP_MOTORS_HELI_RSC_GOV_P                0.1
+#define AP_MOTORS_HELI_RSC_GOV_I                0.1
+
 // default main rotor ramp up time in seconds
 #define AP_MOTORS_HELI_RSC_RAMP_TIME            1       // 1 second to ramp output to main rotor ESC to setpoint
 #define AP_MOTORS_HELI_RSC_RUNUP_TIME           10      // 10 seconds for rotor to reach full speed
@@ -206,6 +211,9 @@ protected:
     AP_Int16        _rsc_thrcrv[5];             // throttle value sent to throttle servo at 0, 25, 50, 75 and 100 percent collective
     AP_Int16        _rsc_slewrate;              // throttle slew rate (percentage per second)
     AP_Int8         _servo_test;                // sets number of cycles to test servo movement on bootup
+    AP_Int16        _rsc_eng_rpm;
+    AP_Float        _rsc_gov_p;
+    AP_Float        _rsc_gov_i;
 
     // internal variables
     float           _collective_mid_pct = 0.0f;      // collective mid parameter value converted to 0 ~ 1 range

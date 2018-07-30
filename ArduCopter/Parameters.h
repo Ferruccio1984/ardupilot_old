@@ -154,12 +154,13 @@ public:
         k_param_single_servo_4,         // 78 - remove
 
         //
-        // 80: Heli
+        // 79: Heli
         //
-        k_param_heli_servo_1 = 80,  // remove
+        k_param_heli_servo_1 = 79,  // remove
         k_param_heli_servo_2,       // remove
         k_param_heli_servo_3,       // remove
         k_param_heli_servo_4,       // remove
+        k_param_heli_servo_5,
         k_param_heli_pitch_ff,      // remove
         k_param_heli_roll_ff,       // remove
         k_param_heli_yaw_ff,        // remove

@@ -17,11 +17,13 @@
 #define AP_MOTORS_HELI_SINGLE_SERVO1_POS                       -60
 #define AP_MOTORS_HELI_SINGLE_SERVO2_POS                       60
 #define AP_MOTORS_HELI_SINGLE_SERVO3_POS                       180
+#define AP_MOTORS_HELI_SINGLE_SERVO5_POS                       0
 
 // swash type definitions
 #define AP_MOTORS_HELI_SINGLE_SWASH_H3                         0
 #define AP_MOTORS_HELI_SINGLE_SWASH_H1                         1
 #define AP_MOTORS_HELI_SINGLE_SWASH_H3_140                     2
+#define AP_MOTORS_HELI_SINGLE_SWASH_H4                         3
 
 // collective control direction definitions
 #define AP_MOTORS_HELI_SINGLE_COLLECTIVE_DIRECTION_NORMAL      0
@@ -43,7 +45,7 @@
 #define AP_MOTORS_HELI_SINGLE_COLYAW_RANGE                     10.0f
 
 // maximum number of swashplate servos
-#define AP_MOTORS_HELI_SINGLE_NUM_SWASHPLATE_SERVOS            3
+#define AP_MOTORS_HELI_SINGLE_NUM_SWASHPLATE_SERVOS            5
 
 /// @class      AP_MotorsHeli_Single
 class AP_MotorsHeli_Single : public AP_MotorsHeli {
@@ -68,6 +70,9 @@ public:
 
     // set_desired_rotor_speed - sets target rotor speed as a number from 0 ~ 1
     void set_desired_rotor_speed(float desired_speed) override;
+
+    // set speed from rpm sensor
+    void set_rpm(int16_t measured_rpm);
 
     // get_main_rotor_speed - gets estimated or measured main rotor speed
     float get_main_rotor_speed() const  override { return _main_rotor.get_rotor_speed(); }

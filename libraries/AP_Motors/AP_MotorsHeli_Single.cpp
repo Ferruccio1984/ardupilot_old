@@ -51,19 +51,28 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Increment: 1
     AP_GROUPINFO("SV3_POS", 3, AP_MotorsHeli_Single, _servo3_pos, AP_MOTORS_HELI_SINGLE_SERVO3_POS),
 
+    // @Param: SV5_POS
+    // @DisplayName: Servo 3 Position
+    // @Description: Angular location of swash servo #3 - only used for H3 swash type
+    // @Range: -180 180
+    // @Units: deg
+    // @User: Standard
+    // @Increment: 1
+    AP_GROUPINFO("SV5_POS", 4, AP_MotorsHeli_Single, _servo5_pos, AP_MOTORS_HELI_SINGLE_SERVO5_POS),
+
     // @Param: TAIL_TYPE
     // @DisplayName: Tail Type
     // @Description: Tail type selection.  Simpler yaw controller used if external gyro is selected
     // @Values: 0:Servo only,1:Servo with ExtGyro,2:DirectDrive VarPitch,3:DirectDrive FixedPitch
     // @User: Standard
-    AP_GROUPINFO("TAIL_TYPE", 4, AP_MotorsHeli_Single, _tail_type, AP_MOTORS_HELI_SINGLE_TAILTYPE_SERVO),
+    AP_GROUPINFO("TAIL_TYPE", 5, AP_MotorsHeli_Single, _tail_type, AP_MOTORS_HELI_SINGLE_TAILTYPE_SERVO),
 
     // @Param: SWASH_TYPE
     // @DisplayName: Swash Type
     // @Description: Swash Type Setting
     // @Values: 0:H3 CCPM Adjustable, 1:H1 Straight Swash, 2:H3_140 CCPM
     // @User: Standard
-    AP_GROUPINFO("SWASH_TYPE", 5, AP_MotorsHeli_Single, _swash_type, AP_MOTORS_HELI_SINGLE_SWASH_H3),
+    AP_GROUPINFO("SWASH_TYPE", 6, AP_MotorsHeli_Single, _swash_type, AP_MOTORS_HELI_SINGLE_SWASH_H3),
 
     // @Param: GYR_GAIN
     // @DisplayName: External Gyro Gain
@@ -72,7 +81,7 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Units: PWM
     // @Increment: 1
     // @User: Standard
-    AP_GROUPINFO("GYR_GAIN", 6, AP_MotorsHeli_Single, _ext_gyro_gain_std, AP_MOTORS_HELI_SINGLE_EXT_GYRO_GAIN),
+    AP_GROUPINFO("GYR_GAIN", 7, AP_MotorsHeli_Single, _ext_gyro_gain_std, AP_MOTORS_HELI_SINGLE_EXT_GYRO_GAIN),
 
     // @Param: PHANG
     // @DisplayName: Swashplate Phase Angle Compensation
@@ -81,7 +90,7 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Units: deg
     // @User: Advanced
     // @Increment: 1
-    AP_GROUPINFO("PHANG", 7, AP_MotorsHeli_Single, _phase_angle, 0),
+    AP_GROUPINFO("PHANG", 8, AP_MotorsHeli_Single, _phase_angle, 0),
 
     // @Param: COLYAW
     // @DisplayName: Collective-Yaw Mixing
@@ -89,14 +98,14 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Range: -10 10
     // @Increment: 0.1
     // @User: Advanced
-    AP_GROUPINFO("COLYAW", 8,  AP_MotorsHeli_Single, _collective_yaw_effect, 0),
+    AP_GROUPINFO("COLYAW", 9,  AP_MotorsHeli_Single, _collective_yaw_effect, 0),
 
     // @Param: FLYBAR_MODE
     // @DisplayName: Flybar Mode Selector
     // @Description: Flybar present or not.  Affects attitude controller used during ACRO flight mode
     // @Values: 0:NoFlybar,1:Flybar
     // @User: Standard
-    AP_GROUPINFO("FLYBAR_MODE", 9, AP_MotorsHeli_Single, _flybar_mode, AP_MOTORS_HELI_NOFLYBAR),
+    AP_GROUPINFO("FLYBAR_MODE", 10, AP_MotorsHeli_Single, _flybar_mode, AP_MOTORS_HELI_NOFLYBAR),
 
     // @Param: TAIL_SPEED
     // @DisplayName: Direct Drive VarPitch Tail ESC speed
@@ -105,7 +114,7 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Units: PWM
     // @Increment: 1
     // @User: Standard
-    AP_GROUPINFO("TAIL_SPEED", 10, AP_MotorsHeli_Single, _direct_drive_tailspeed, AP_MOTORS_HELI_SINGLE_DDVP_SPEED_DEFAULT),
+    AP_GROUPINFO("TAIL_SPEED", 11, AP_MotorsHeli_Single, _direct_drive_tailspeed, AP_MOTORS_HELI_SINGLE_DDVP_SPEED_DEFAULT),
 
     // @Param: GYR_GAIN_ACRO
     // @DisplayName: External Gyro Gain for ACRO
@@ -114,7 +123,7 @@ const AP_Param::GroupInfo AP_MotorsHeli_Single::var_info[] = {
     // @Units: PWM
     // @Increment: 1
     // @User: Standard
-    AP_GROUPINFO("GYR_GAIN_ACRO", 11, AP_MotorsHeli_Single,  _ext_gyro_gain_acro, 0),
+    AP_GROUPINFO("GYR_GAIN_ACRO", 12, AP_MotorsHeli_Single,  _ext_gyro_gain_acro, 0),
 
     // Indices 16-18 were used by RSC_PWM_MIN, RSC_PWM_MAX and RSC_PWM_REV and should not be used
 
@@ -143,7 +152,8 @@ void AP_MotorsHeli_Single::set_update_rate( uint16_t speed_hz )
         1U << AP_MOTORS_MOT_1 |
         1U << AP_MOTORS_MOT_2 |
         1U << AP_MOTORS_MOT_3 |
-        1U << AP_MOTORS_MOT_4;
+        1U << AP_MOTORS_MOT_4 |
+        1U << AP_MOTORS_MOT_5;
     rc_set_freq(mask, _speed_hz);
 }
 
@@ -223,6 +233,10 @@ void AP_MotorsHeli_Single::output_test_seq(uint8_t motor_seq, int16_t pwm)
             rc_write(AP_MOTORS_MOT_4, pwm);
             break;
         case 5:
+             // swash servo 5
+             rc_write(AP_MOTORS_MOT_5, pwm);
+             break;
+        case 6:
             // main rotor
             rc_write(AP_MOTORS_HELI_SINGLE_RSC, pwm);
             break;
@@ -241,6 +255,13 @@ void AP_MotorsHeli_Single::set_desired_rotor_speed(float desired_speed)
     _tail_rotor.set_desired_speed(_direct_drive_tailspeed*0.001f);
 }
 
+void AP_MotorsHeli_Single::set_rpm(int16_t measured_rpm)
+{
+	_main_rotor.set_measured_rpm(measured_rpm);
+}
+
+
+
 // calculate_scalars - recalculates various scalers used.
 void AP_MotorsHeli_Single::calculate_armed_scalars()
 {
@@ -253,6 +274,9 @@ void AP_MotorsHeli_Single::calculate_armed_scalars()
     _main_rotor.set_critical_speed(_rsc_critical*0.001f);
     _main_rotor.set_idle_output(_rsc_idle_output*0.001f);
     _main_rotor.set_throttle_curve(thrcrv, (uint16_t)_rsc_slewrate.get());
+    _main_rotor.set_eng_rpm(_rsc_eng_rpm);
+    _main_rotor.set_gov_p(_rsc_gov_p);
+    _main_rotor.set_gov_i(_rsc_gov_i);
 }
 
 
@@ -325,6 +349,24 @@ void AP_MotorsHeli_Single::calculate_roll_pitch_collective_factors()
         _collectiveFactor[CH_1] = 1;
         _collectiveFactor[CH_2] = 1;
         _collectiveFactor[CH_3] = 1;
+    }else if (_swash_type == AP_MOTORS_HELI_SINGLE_SWASH_H4) {       //Three-Servo H3-140 CCPM mixer factors
+    	// aileron factors
+    	        _rollFactor[CH_1] = cosf(radians(_servo1_pos + 90 - _phase_angle));
+    	        _rollFactor[CH_2] = cosf(radians(_servo2_pos + 90 - _phase_angle));
+    	        _rollFactor[CH_3] = cosf(radians(_servo3_pos + 90 - _phase_angle));
+    	        _rollFactor[CH_5] = cosf(radians(_servo5_pos + 90 - _phase_angle));
+
+    	        // elevator factors
+    	        _pitchFactor[CH_1] = cosf(radians(_servo1_pos - _phase_angle));
+    	        _pitchFactor[CH_2] = cosf(radians(_servo2_pos - _phase_angle));
+    	        _pitchFactor[CH_3] = cosf(radians(_servo3_pos - _phase_angle));
+    	        _pitchFactor[CH_5] = cosf(radians(_servo5_pos - _phase_angle));
+
+    	        // collective factors
+    	        _collectiveFactor[CH_1] = 1;
+    	        _collectiveFactor[CH_2] = 1;
+    	        _collectiveFactor[CH_3] = 1;
+    	        _collectiveFactor[CH_5] = 1;
     } else {                                                              //H1 straight outputs, no mixing
         // aileron factors
         _rollFactor[CH_1] = 1;
@@ -349,7 +391,7 @@ uint16_t AP_MotorsHeli_Single::get_motor_mask()
 {
     // heli uses channels 1,2,3,4 and 8
     // setup fast channels
-    uint32_t mask = 1U << 0 | 1U << 1 | 1U << 2 | 1U << 3 | 1U << AP_MOTORS_HELI_SINGLE_RSC;
+    uint32_t mask = 1U << 0 | 1U << 1 | 1U << 2 | 1U << 3 | 1U<<4| 1U << AP_MOTORS_HELI_SINGLE_RSC;
 
     if (_tail_type == AP_MOTORS_HELI_SINGLE_TAILTYPE_SERVO_EXTGYRO) {
         mask |= 1U << AP_MOTORS_HELI_SINGLE_EXTGYRO;
@@ -468,16 +510,18 @@ void AP_MotorsHeli_Single::move_actuators(float roll_out, float pitch_out, float
         servo2_out += 0.5f;
     }
     float servo3_out = ((_rollFactor[CH_3] * roll_out) + (_pitchFactor[CH_3] * pitch_out))*0.45f + _collectiveFactor[CH_3] * collective_out_scaled;
-
+    float servo5_out = ((_rollFactor[CH_5] * roll_out) + (_pitchFactor[CH_5] * pitch_out))*0.45f + _collectiveFactor[CH_5] * collective_out_scaled;
     // rescale from -1..1, so we can use the pwm calc that includes trim
     servo1_out = 2*servo1_out - 1;
     servo2_out = 2*servo2_out - 1;
     servo3_out = 2*servo3_out - 1;
+    servo5_out = 2*servo5_out - 1;
 
-    // actually move the servos.  PWM is sent based on nominal 1500 center.  servo output shifts center based on trim value.
-    rc_write_swash(AP_MOTORS_MOT_1, servo1_out);
-    rc_write_swash(AP_MOTORS_MOT_2, servo2_out);
-    rc_write_swash(AP_MOTORS_MOT_3, servo3_out);
+    // actually move the servos
+    rc_write(AP_MOTORS_MOT_1, calc_pwm_output_1to1_swash_servo(servo1_out, _swash_servo_1));
+    rc_write(AP_MOTORS_MOT_2, calc_pwm_output_1to1_swash_servo(servo2_out, _swash_servo_2));
+    rc_write(AP_MOTORS_MOT_3, calc_pwm_output_1to1_swash_servo(servo3_out, _swash_servo_3));
+    rc_write(AP_MOTORS_MOT_5, calc_pwm_output_1to1_swash_servo(servo5_out, _swash_servo_5));
 
     // update the yaw rate using the tail rotor/servo
     move_yaw(yaw_out + yaw_offset);

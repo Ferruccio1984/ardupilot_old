@@ -65,7 +65,7 @@ void AP_MotorsHeli_RSC::output(RotorControlState state)
         case ROTOR_CONTROL_STOP:
             // set rotor ramp to decrease speed to zero, this happens instantly inside update_rotor_ramp()
             update_rotor_ramp(0.0f, dt);
-
+            _i_out_last = 0;
             // control output forced to zero
             _control_output = 0.0f;
             break;
@@ -73,7 +73,7 @@ void AP_MotorsHeli_RSC::output(RotorControlState state)
         case ROTOR_CONTROL_IDLE:
             // set rotor ramp to decrease speed to zero
             update_rotor_ramp(0.0f, dt);
-
+            _i_out_last = 0;
             // set rotor control speed to idle speed parameter, this happens instantly and ignore ramping
             _control_output = _idle_output;
             break;
@@ -89,6 +89,22 @@ void AP_MotorsHeli_RSC::output(RotorControlState state)
                 // throttle output from throttle curve based on collective position
                     float desired_throttle = calculate_desired_throttle(_collective_in);
                     _control_output = _idle_output + (_rotor_ramp_output * (desired_throttle - _idle_output));
+            }else if (_control_mode == ROTOR_CONTROL_MODE_CLOSED_LOOP_POWER_OUTPUT) {
+            	float desired_throttle = calculate_desired_throttle(_collective_in);
+            	_rpm_error = (_eng_rpm - _measured_rpm) ;
+            	float rpm_percent = _measured_rpm/_eng_rpm ;
+            	if (rpm_percent > 0.8){
+            		float _i_out = ((_rpm_error) * _gov_i)/100.0f;
+            		_i_output = _i_out + _i_out_last ;
+            		_p_output = (_rpm_error * _gov_p)/100.0f;
+            		_p_i_out = _p_output + _i_output;
+            		//_p_i_out = constrain_float(_p_i_out, 0.35, -0.35);
+            		_i_out_last = _i_out;
+            		_control_output = _idle_output + (_rotor_ramp_output * (desired_throttle + _p_i_out - _idle_output));
+            	}else{
+            		_control_output = _idle_output + (_rotor_ramp_output * (desired_throttle - _idle_output));
+            	}
+
             }
             break;
     }
