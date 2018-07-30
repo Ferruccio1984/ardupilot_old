@@ -49,8 +49,20 @@ public:
     float       get_idle_output() { return _idle_output; }
     void        set_idle_output(float idle_output) { _idle_output = idle_output; }
 
+    // set engine governor parameters
+    float       get_eng_rpm() {return _eng_rpm;}
+    void        set_eng_rpm(float eng_rpm) { _eng_rpm = eng_rpm; }
+    float       get_gov_p() {return _gov_p;}
+    void        set_gov_p(float gov_p) { _gov_p = gov_p; }
+    float       get_gov_i() {return _gov_i;}
+    void        set_gov_i(float gov_i) { _gov_i = gov_i; }
+
+
     // get_desired_speed
     float       get_desired_speed() const { return _desired_speed; }
+
+    // pass actual rotor speed
+    void        set_measured_rpm(int16_t measured_rpm) {_measured_rpm = measured_rpm;}
 
     // set_desired_speed
     void        set_desired_speed(float desired_speed) { _desired_speed = desired_speed; }
@@ -100,6 +112,15 @@ private:
     float           _thrcrv_poly[4][4];         // spline polynomials for throttle curve interpolation
     uint16_t        _power_slewrate = 0;        // slewrate for throttle (percentage per second)
     float           _collective_in;             // collective in for throttle curve calculation, range 0-1.0f
+    float           _eng_rpm;
+    float           _gov_p;
+    float           _gov_i;
+    int16_t			_measured_rpm;
+    float           _rpm_error = 0;
+    float           _p_output = 0.0000f;
+    float           _i_out_last = 0.0000f;
+    float           _p_i_out = 0.0000f;
+    float           _i_output = 0.0000f;
 
     // update_rotor_ramp - slews rotor output scalar between 0 and 1, outputs float scalar to _rotor_ramp_output
     void            update_rotor_ramp(float rotor_ramp_input, float dt);

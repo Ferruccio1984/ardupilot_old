@@ -193,6 +193,30 @@ const AP_Param::GroupInfo AP_MotorsHeli::var_info[] = {
     // @User: Standard
     AP_GROUPINFO("RSC_THRCRV_100", 24, AP_MotorsHeli, _rsc_thrcrv[4], AP_MOTORS_HELI_RSC_THRCRV_100_DEFAULT),
 
+    // @Param: RSC_ENG_RPM
+    // @DisplayName: engine speed
+    // @Description: Rotor speed output while armed but rotor control speed is not engaged
+    // @Range: 0 20000
+    // @Increment: 10
+    // @User: Standard
+    AP_GROUPINFO("RSC_ENG", 25, AP_MotorsHeli, _rsc_eng_rpm, AP_MOTORS_HELI_RSC_ENG_RPM),
+
+    // @Param: RSC_GOV_P
+    // @DisplayName: engine speed governor proportional term
+    // @Description: Rotor speed output while armed but rotor control speed is not engaged
+    // @Range: 0 10
+    // @Increment: 0.01
+    // @User: Standard
+    AP_GROUPINFO("RSC_GOV_P", 26, AP_MotorsHeli, _rsc_gov_p, AP_MOTORS_HELI_RSC_GOV_P),
+
+    // @Param: RSC_GOV_P
+    // @DisplayName: engine speed governor proportional term
+    // @Description: Rotor speed output while armed but rotor control speed is not engaged
+    // @Range: 0 10
+    // @Increment: 0.01
+    // @User: Standard
+    AP_GROUPINFO("RSC_GOV_I", 27, AP_MotorsHeli, _rsc_gov_i, AP_MOTORS_HELI_RSC_GOV_I),
+
     AP_GROUPEND
 };
 

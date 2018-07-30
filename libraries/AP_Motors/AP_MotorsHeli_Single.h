@@ -16,11 +16,13 @@
 #define AP_MOTORS_HELI_SINGLE_SERVO1_POS                       -60
 #define AP_MOTORS_HELI_SINGLE_SERVO2_POS                       60
 #define AP_MOTORS_HELI_SINGLE_SERVO3_POS                       180
+#define AP_MOTORS_HELI_SINGLE_SERVO5_POS                       0
 
 // swash type definitions
 #define AP_MOTORS_HELI_SINGLE_SWASH_H3                         0
 #define AP_MOTORS_HELI_SINGLE_SWASH_H1                         1
 #define AP_MOTORS_HELI_SINGLE_SWASH_H3_140                     2
+#define AP_MOTORS_HELI_SINGLE_SWASH_H4                         3
 
 // collective control direction definitions
 #define AP_MOTORS_HELI_SINGLE_COLLECTIVE_DIRECTION_NORMAL      0
@@ -42,7 +44,7 @@
 #define AP_MOTORS_HELI_SINGLE_COLYAW_RANGE                     10.0f
 
 // maximum number of swashplate servos
-#define AP_MOTORS_HELI_SINGLE_NUM_SWASHPLATE_SERVOS            3
+#define AP_MOTORS_HELI_SINGLE_NUM_SWASHPLATE_SERVOS            5
 
 /// @class      AP_MotorsHeli_Single
 class AP_MotorsHeli_Single : public AP_MotorsHeli {
@@ -67,6 +69,9 @@ public:
 
     // set_desired_rotor_speed - sets target rotor speed as a number from 0 ~ 1
     void set_desired_rotor_speed(float desired_speed) override;
+
+    // set speed from rpm sensor
+    void set_rpm(int16_t measured_rpm);
 
     // get_main_rotor_speed - gets estimated or measured main rotor speed
     float get_main_rotor_speed() const  override { return _main_rotor.get_rotor_speed(); }
@@ -143,6 +148,7 @@ protected:
     AP_Int16        _servo1_pos;                // Angular location of swash servo #1
     AP_Int16        _servo2_pos;                // Angular location of swash servo #2
     AP_Int16        _servo3_pos;                // Angular location of swash servo #3
+    AP_Int16        _servo5_pos;
     AP_Int8         _collective_direction;      // Collective control direction, normal or reversed
     AP_Int16        _tail_type;                 // Tail type used: Servo, Servo with external gyro, direct drive variable pitch or direct drive fixed pitch
     AP_Int8         _swash_type;                // Swash Type Setting
@@ -156,6 +162,7 @@ protected:
     SRV_Channel    *_swash_servo_1;
     SRV_Channel    *_swash_servo_2;
     SRV_Channel    *_swash_servo_3;
+    SRV_Channel    *_swash_servo_5;
     SRV_Channel    *_yaw_servo;
     SRV_Channel    *_servo_aux;
 
